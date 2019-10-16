@@ -1,1 +1,5 @@
-**Staging:** [![pipeline status](https://gitlab.ethz.ch/viscon19/happy-honeyberries/badges/staging/pipeline.svg)](https://gitlab.ethz.ch/viscon19/happy-honeyberries/commits/staging)
+A small website to rate teaching assistants not based on a direct score but rather evaluate categories with a simple tinder like survey design.
+
+The complete website was written at the Viscon Hackathon in Django + Vue.js by a team of 5.
+
+The website is hosted under https://happy-honeyberries.svis.ethz.ch/ if still available.
