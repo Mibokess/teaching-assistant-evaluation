@@ -1,0 +1,15 @@
+psycopg2-binary # required for databases
+grpcio # required for servis
+protobuf # required for servis
+django-webpack-loader
+pytz
+pipenv
+
+django 
+djangorestframework 
+gunicorn 
+whitenoise 
+dj-database-url 
+psycopg2-binary
+
+pandas

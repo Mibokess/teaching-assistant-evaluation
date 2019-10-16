@@ -1,0 +1,46 @@
+variables:
+  # Please do not change the first two variables. Things WILL break.
+  VIS_CI_APP_NAME: "vct-happy-honeyberries"
+  VIS_CI_DEPLOYMENT_SUBDOMAIN: "happy-honeyberries"
+  # Add any additional variables you need here:
+  VIS_CI_ENABLE_POSTGRES: "true"
+  VIS_CI_SERVIS_DEPENDENCIES: "people-api"
+  VIS_CI_SERVIS_PYTHON_OUT: "./src/"
+
+stages:
+  - build
+  - cleanup
+
+build:
+  tags:
+    - docker-runner
+  stage: build
+  environment:
+    name: $VIS_CI_APP_NAME-$CI_COMMIT_REF_NAME
+    url: https://$VIS_CI_DEPLOYMENT_SUBDOMAIN.$VIS_CI_DEPLOYMENT_DOMAIN
+  script:
+    - do_servis_generate
+    - do_default_build
+    - do_deployment
+  only:
+    refs:
+      - staging
+
+cleanup:
+  tags:
+    - docker-runner
+  stage: cleanup
+  script:
+    - do_cleanup
+  when: manual
+  only:
+    refs:
+      - staging
+
+.auto_devops: &auto_devops |
+  git clone --depth 1 git@gitlab.ethz.ch:vis/cit/ci-framework.git
+  source ci-framework/ciscript.sh
+
+before_script:
+  - docker info
+  - *auto_devops

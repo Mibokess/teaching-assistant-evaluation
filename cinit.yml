@@ -1,0 +1,137 @@
+programs:
+#   - name: server
+#     path: python3
+#     args:
+#       - "-u"
+#       - /app/hello_vis_database.py
+#       - 80
+#     user: app-user
+#     group: app-user
+#     capabilities:
+#       - CAP_NET_BIND_SERVICE
+#     env:
+#       - RUNTIME_POSTGRES_DB_SERVER:
+#       - RUNTIME_POSTGRES_DB_PORT:
+#       - RUNTIME_POSTGRES_DB_NAME:
+#       - RUNTIME_POSTGRES_DB_USER:
+#       - RUNTIME_POSTGRES_DB_PW:
+
+# DO NOT KEEP THIS IN PRODUCTION.
+#  - name: clean
+#    path: python3
+#    args:
+#      - /app/manage.py
+#      - dbshell
+#      - "BEGIN;DROP TABLE IF EXISTS \"api_lecture\";DROP TABLE IF EXISTS \"api_question\";DROP TABLE IF EXISTS \"api_session\";DROP TABLE IF EXISTS \"api_teachingassistant\";DROP TABLE IF EXISTS \"auth_group\";DROP TABLE IF EXISTS \"auth_group_permissions\";DROP TABLE IF EXISTS \"auth_permission\";DROP TABLE IF EXISTS \"auth_user_groups\";DROP TABLE IF EXISTS \"auth_user_user_permissions\";DROP TABLE IF EXISTS \"django_admin_log\";DROP TABLE IF EXISTS \"django_content_type\";DROP TABLE IF EXISTS \"django_migrations\";DROP TABLE IF EXISTS \"django_session\";COMMIT;"
+#    user: root
+#    group: root
+#    capabilities:
+#      - CAP_NET_BIND_SERVICE
+#    env:
+#      - RUNTIME_POSTGRES_DB_SERVER:
+#      - RUNTIME_POSTGRES_DB_PORT:
+#      - RUNTIME_POSTGRES_DB_NAME:
+#      - RUNTIME_POSTGRES_DB_USER:
+#      - RUNTIME_POSTGRES_DB_PW:
+#    before:
+#      - database_make_migrations
+#  - name: clean_hard
+#    path: echo
+#    args:
+#      - "BEGIN;DROP TABLE IF EXISTS \"api_lecture\";DROP TABLE IF EXISTS \"api_question\";DROP TABLE IF EXISTS \"api_session\";DROP TABLE IF EXISTS \"api_teachingassistant\";DROP TABLE IF EXISTS \"auth_group\";DROP TABLE IF EXISTS \"auth_group_permissions\";DROP TABLE IF EXISTS \"auth_permission\";DROP TABLE IF EXISTS \"auth_user_groups\";DROP TABLE IF EXISTS \"auth_user_user_permissions\";DROP TABLE IF EXISTS \"django_admin_log\";DROP TABLE IF EXISTS \"django_content_type\";DROP TABLE IF EXISTS \"django_migrations\";DROP TABLE IF EXISTS \"django_session\";COMMIT;"
+#      - |
+#      - python3
+#      - dbshell
+#    user: root
+#    group: root
+#    capabilities:
+#      - CAP_NET_BIND_SERVICE
+#    env:
+#      - RUNTIME_POSTGRES_DB_SERVER:
+#      - RUNTIME_POSTGRES_DB_PORT:
+#      - RUNTIME_POSTGRES_DB_NAME:
+#      - RUNTIME_POSTGRES_DB_USER:
+#      - RUNTIME_POSTGRES_DB_PW:
+#    before:
+#      - database_make_migrations
+  - name: database_make_migrations
+    path: python3
+    args:
+      - /app/manage.py
+      - makemigrations
+        #      - 0.0.0.0:80
+    user: root
+    group: root
+    capabilities:
+      - CAP_NET_BIND_SERVICE
+    env:
+      - RUNTIME_POSTGRES_DB_SERVER:
+      - RUNTIME_POSTGRES_DB_PORT:
+      - RUNTIME_POSTGRES_DB_NAME:
+      - RUNTIME_POSTGRES_DB_USER:
+      - RUNTIME_POSTGRES_DB_PW:   
+      - RUNTIME_SERVIS_PEOPLE_API_SERVER:
+      - RUNTIME_SERVIS_PROPLE_API_PORT:
+      - RUNTIME_SERVIS_PEOPLE_API_KEY:
+    before:
+      - database_migrate
+
+  - name: database_migrate
+    path: python3   
+    args:
+      - /app/manage.py 
+      - migrate
+        #      - 0.0.0.0:80
+    user: root
+    group: root
+    capabilities:
+      - CAP_NET_BIND_SERVICE
+    env:
+      - RUNTIME_POSTGRES_DB_SERVER:
+      - RUNTIME_POSTGRES_DB_PORT:
+      - RUNTIME_POSTGRES_DB_NAME:
+      - RUNTIME_POSTGRES_DB_USER:
+      - RUNTIME_POSTGRES_DB_PW:   
+      - RUNTIME_SERVIS_PEOPLE_API_SERVER:
+      - RUNTIME_SERVIS_PROPLE_API_PORT:
+      - RUNTIME_SERVIS_PEOPLE_API_KEY:
+    before: 
+      - django
+
+  - name: django
+    path: python3   
+    args:
+      - /app/manage.py 
+      - runserver
+      - 0.0.0.0:80
+    user: root
+    group: root
+    capabilities:
+      - CAP_NET_BIND_SERVICE
+    env:
+      - RUNTIME_POSTGRES_DB_SERVER:
+      - RUNTIME_POSTGRES_DB_PORT:
+      - RUNTIME_POSTGRES_DB_NAME:
+      - RUNTIME_POSTGRES_DB_USER:
+      - RUNTIME_POSTGRES_DB_PW:   
+      - RUNTIME_SERVIS_PEOPLE_API_SERVER:      
+      - RUNTIME_SERVIS_PEOPLE_API_PORT:      
+      - RUNTIME_SERVIS_PEOPLE_API_KEY:
+
+#  - name: yarn
+#    path: yarn
+#    args:
+#      - serve
+#      - --port
+#      - 80
+#    user: root
+#    group: root
+#    capabilities:
+#      - CAP_NET_BIND_SERVICE
+#    env:
+#      - RUNTIME_POSTGRES_DB_SERVER:
+#      - RUNTIME_POSTGRES_DB_PORT:
+#      - RUNTIME_POSTGRES_DB_NAME:
+#      - RUNTIME_POSTGRES_DB_USER:
+#      - RUNTIME_POSTGRES_DB_PW:
+    
